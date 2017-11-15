@@ -1,0 +1,30 @@
+PROJECT_PACKAGE := go-academy
+
+# list of available packages
+PKG_LIST_CMD := go list ./... | grep -v '/vendor/'
+SOURCE_FILES := $(shell /usr/bin/find . -type f -name '*.go' -not -path './vendor/*')
+
+
+.DEFAULT_GOAL := help
+.PHONY: help
+help: ## Print this text
+	@grep -E '^[a-zA-Z_/%\-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+
+clean: ## Clean artifacts 
+	rm -rf build
+
+
+build: build/server build/cli ## Build all executables
+
+build/server: ## Builds server executable
+	go build -o build/server $(PROJECT_PACKAGE)/cmd/server
+
+build/cli: ## Builds cli executable
+	go build -o build/cli $(PROJECT_PACKAGE)/cmd/cli
+
+run/server: build/server ## Run server executable
+	./build/server
+
+run/cli: build/cli ## Run cli executable
+	./build/cli
