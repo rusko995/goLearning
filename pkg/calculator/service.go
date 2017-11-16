@@ -9,8 +9,6 @@ import (
 
 // Calculate : calculates the equation
 func Calculate(equation string) string {
-	fmt.Println(equation)
-
 	equation = strings.Join(strings.Fields(equation), "")
 
 	operator := regexp.MustCompile(`[+*/-]`).FindAllString(equation, -1)[0]
