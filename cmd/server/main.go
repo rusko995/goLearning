@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"go-academy/pkg/calculator"
+	"github.com/andrej/goLearning/pkg/calculator"
 )
 
 func apiCalculateHandler(w http.ResponseWriter, r *http.Request) {
@@ -28,7 +28,6 @@ func apiCalculateHandler(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("equation") != "" {
 		equation = calculator.Calculate(r.FormValue("equation"))
 	}
-
 
 	data := struct {
 		Equation string

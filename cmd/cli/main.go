@@ -1,46 +1,46 @@
 package main
 
 import (
+	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
-	"errors"
-	"bufio"
-	"strings"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 func main() {
 	input := flag.String("c", "", "Math equation")
 	flag.Parse()
 
-	if *input == ""{
+	if *input == "" {
 		*input, _ = readStdin()
-	} 
+	}
 
-	equation := strings.Join(strings.Fields(*input),"")
+	equation := strings.Join(strings.Fields(*input), "")
 
 	operator := regexp.MustCompile(`[+*/-]`).FindAllString(equation, -1)[0]
 	s := regexp.MustCompile(`[+*/-]`).Split(equation, -1)
 	if len(s) < 2 {
-		
+
 	}
 	first, _ := strconv.Atoi(s[0])
 	second, _ := strconv.Atoi(s[1])
 
 	switch operator {
 	case "+":
-		result := first+second
+		result := first + second
 		fmt.Printf("Result: %d\n", result)
 	case "-":
-		result := first-second
+		result := first - second
 		fmt.Printf("Result: %d\n", result)
 	case "*":
-		result := first*second
+		result := first * second
 		fmt.Printf("Result: %d\n", result)
 	case "/":
-		result := first/second
+		result := first / second
 		fmt.Printf("Result: %d\n", result)
 	}
 

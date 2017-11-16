@@ -1,4 +1,4 @@
-PROJECT_PACKAGE := go-academy
+PROJECT_PACKAGE := github.com/andrej/goLearning
 
 # list of available packages
 PKG_LIST_CMD := go list ./... | grep -v '/vendor/'
@@ -14,7 +14,6 @@ help: ## Print this text
 clean: ## Clean artifacts 
 	rm -rf build
 
-
 build: build/server build/cli ## Build all executables
 
 build/server: ## Builds server executable
@@ -24,7 +23,26 @@ build/cli: ## Builds cli executable
 	go build -o build/cli $(PROJECT_PACKAGE)/cmd/cli
 
 run/server: build/server ## Run server executable
-	./build/server
+	./build/server -addr :8888
 
 run/cli: build/cli ## Run cli executable
 	./build/cli
+
+qa: test/unit test/static ## Runs entire QA suite
+
+test/unit: ## Runs tests
+	go test -tags=mock -v $(shell $(PKG_LIST_CMD))
+
+test/static: test/format test/lint test/vet # Performs static analysis of the code
+	test -z "$(shell gofmt -l $(SOURCE_FILES))"
+
+test/format: # Tests code formatting
+	go fmt $(shell $(PKG_LIST_CMD))
+
+test/lint: ## Lints the source code
+	@$(foreach pkg,$(shell $(PKG_LIST_CMD)),golint -set_exit_status $(pkg) || exit 1;)
+
+test/vet: ## Vets the source code
+	go vet $(shell $(PKG_LIST_CMD))
+
+
